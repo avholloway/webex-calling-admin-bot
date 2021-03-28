@@ -64,9 +64,9 @@ ex User enters @botname help, the bot will write back in markdown
 framework.hears(/help|what can i (do|say)|what (can|do) you do/i, function (bot, trigger) {
   console.log(`someone needs help! They asked ${trigger.text}`);
   responded = true;
-  bot.say(`Hello ${trigger.person.displayName}.`)
+  bot.say(`Hey ${trigger.person.displayName}.`)
     .then(() => sendHelp(bot))
-    .catch((e) => console.error(`Problem in help hander: ${e.message}`));
+    .catch((e) => console.error(`Problem in help handler: ${e.message}`));
 });
 
 /* On mention with command
