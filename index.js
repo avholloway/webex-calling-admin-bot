@@ -6,13 +6,21 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 app.use(bodyParser.json());
-app.use(express.static('images'));
+// app.use(express.static('images'));
 
 require('dotenv').config()
 const config = {
   "webhookUrl": process.env.WEBHOOK,
   "token": process.env.BOT_TOKEN,
   "port": process.env.PORT
+}
+
+if (process.env.GUIDE_EMAILS) {
+  config.guideEmails = process.env.GUIDE_EMAILS;
+}
+if (!((process.env.ALLOWED_DOMAINS) || (process.env.GUIDE_EMAILS))) {
+  console.error(`This demo requires at least one of ALLOWED_DOMAINS and/or GUIDE_EMAIL environment variables to be set.`);
+  process.exit(0);
 }
 
 // init framework
@@ -209,7 +217,7 @@ function sendHelp(bot) {
 //Server config & housekeeping
 // Health Check
 app.get('/', function (req, res) {
-  res.send(`I'm alive.`);
+  res.send(`Hi.  I'm the Webex Calling Admin Bot.  You can add me to Webex and send me a message.`);
 });
 
 app.post('/', webhook(framework));
