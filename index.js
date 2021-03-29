@@ -26,7 +26,7 @@ if (!((process.env.ALLOWED_DOMAINS) || (process.env.GUIDE_EMAILS))) {
 // init framework
 var framework = new framework(config);
 framework.start();
-console.log("Starting framework, please wait...");
+console.log("Starting 1 framework, please wait...");
 framework.on("initialized", function () {
   console.log("framework is all fired up! [Press CTRL-C to quit]");
 });
