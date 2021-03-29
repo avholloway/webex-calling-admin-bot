@@ -19,7 +19,6 @@ const config = {
 var framework = new framework(config);
 framework.start();
 console.log("Starting framework, please wait...");
-
 framework.on("initialized", function () {
   console.log("framework is all fired up! [Press CTRL-C to quit]");
 });
@@ -33,11 +32,11 @@ framework.on('spawn', (bot, id, actorId) => {
     // spammed every time your server is restarted
     console.log(`While starting up, the framework found our bot in a space called: ${bot.room.title}`);
   } else {
-    // When actorId is present it means someone added your bot got added to a new space
+    // When actorId is present it means someone added your bot to a new space
     // Lets find out more about them..
     var msg = 'You can say `help` to get the list of words I am able to respond to.';
     bot.webex.people.get(actorId).then((user) => {
-      msg = `Hello there ${user.displayName}. ${msg}`; 
+      msg = `Hey there ${user.displayName}. ${msg}`; 
     }).catch((e) => {
       console.error(`Failed to lookup user details in framwork.on("spawn"): ${e.message}`);
       msg = `Hello there. ${msg}`;  
@@ -108,32 +107,6 @@ framework.hears('space', function (bot) {
   bot.say("markdown", outputString)
     .catch((e) => console.error(`bot.say failed: ${e.message}`));
 
-});
-
-/* 
-   Say hi to every member in the space
-   This demonstrates how developers can access the webex
-   sdk to call any Webex API.  API Doc: https://webex.github.io/webex-js-sdk/api/
-*/
-framework.hears("say hi to everyone", function (bot) {
-  console.log("say hi to everyone.  Its a party");
-  responded = true;
-  // Use the webex SDK to get the list of users in this space
-  bot.webex.memberships.list({roomId: bot.room.id})
-    .then((memberships) => {
-      for (const member of memberships.items) {
-        if (member.personId === bot.person.id) {
-          // Skip myself!
-          continue;
-        }
-        let displayName = (member.personDisplayName) ? member.personDisplayName : member.personEmail;
-        bot.say(`Hello ${displayName}`);
-      }
-    })
-    .catch((e) => {
-      console.error(`Call to sdk.memberships.get() failed: ${e.messages}`);
-      bot.say('Hello everybody!');
-    });
 });
 
 // Buttons & Cards data
@@ -222,13 +195,14 @@ framework.hears(/.*/, function (bot, trigger) {
 
 function sendHelp(bot) {
   bot.say("markdown", 'These are the commands I can respond to:', '\n\n ' +
-    '1. **framework**   (learn more about the Webex Bot Framework) \n' +
-    '2. **info**  (get your personal details) \n' +
-    '3. **space**  (get details about this space) \n' +
-    '4. **card me** (a cool card!) \n' +
-    '5. **say hi to everyone** (everyone gets a greeting using a call to the Webex SDK) \n' +
-    '6. **reply** (have bot reply to your message) \n' +
-    '7. **help** (what you are reading now)');
+    '1. **user** - Get info on a user by supplying a piece of info about them. I.e., name, email, phone number.\n' +
+    '2. **workspace** - Get info on a workspace by supplying a piece of info about it.  I.e., name, phone number, calendar address.\n' +
+    '3. **device** - Get info on a device by supplying a piece of info about it.  I.e., MAC address, belongs to, or tag.\n' +
+    '4. **number** - Get info on a number by supplying the number.  E.g., 2001 or +16125551212\n' +
+    '5. **location** - Get info on a location by supplying a piece of info about it.  I.e., name, routing prefix, or phone number\n' +
+    '6. **service settings** - List services settings\n' +
+    '7. **client settings** - List client settings\n' +
+    '8. **help** - what you are reading now');
 }
 
 
