@@ -77,6 +77,15 @@ framework.hears(/help|what can i (do|say)|what (can|do) you do/i, function (bot,
 });
 
 /* On mention with command
+ex User enters @botname authorize, the bot will supply a link to start the oauth grant flow
+*/
+framework.hears('authorize', function (bot) {
+  console.log("authorize command received");
+  responded = true;
+  bot.say("markdown", `[Authorize Me!](${config.webhookUrl}/authorize)`);
+});
+
+/* On mention with command
 ex User enters @botname framework, the bot will write back in markdown
 */
 framework.hears('framework', function (bot) {
@@ -213,6 +222,9 @@ function sendHelp(bot) {
     '8. **help** - what you are reading now');
 }
 
+app.get('/authorize', function (req, res) {
+  res.send(`Hi.  I'm the Webex Calling Admin Bot.  You can add me to Webex and send me a message.`);
+});
 
 //Server config & housekeeping
 // Health Check
