@@ -8,6 +8,8 @@ var app = express();
 app.use(bodyParser.json());
 // app.use(express.static('images'));
 
+const axios = require('axios')
+
 require('dotenv').config()
 const config = {
   "webhookUrl": process.env.WEBHOOK,
@@ -82,7 +84,7 @@ ex User enters @botname authorize, the bot will supply a link to start the oauth
 framework.hears('authorize', function (bot) {
   console.log("authorize command received");
   responded = true;
-  bot.say("markdown", `[Authorize Me!](${config.webhookUrl}/authorize)`);
+  bot.say("markdown", `[Authorize Me!](${process.env.INT_AUTH_URL}banana)`);
 });
 
 /* On mention with command
@@ -223,7 +225,37 @@ function sendHelp(bot) {
 }
 
 app.get('/authorize', function (req, res) {
-  res.send(`Hi.  I'm the Webex Calling Admin Bot.  You can add me to Webex and send me a message.`);
+  // From Python + Flask
+  // data = {
+  //   "grant_type": "authorization_code",
+  //   "client_id": "Cbd0696ec5be29c8bf30c854a0b986e524baa98a714a0cac96305b8e7b0cc5ede",
+  //   "client_secret": "0ae05e2a292d5ef3738f8c6a53ec4e57f37b258f4d2531ac98fcf7ba41879404",
+  //   "code": request.args.get("code"),
+  //   "redirect_uri": "http://127.0.0.1:5000/oauth"
+  // }
+  // resp = requests.post("https://webexapis.com/v1/access_token", data=data)
+  // resp.raise_for_status()
+  // access_token = resp.json()["access_token"]
+  // session['access_token'] = access_token
+  // return redirect(url_for("home"))
+  axios
+  .post('https://webexapis.com/v1/access_token', {
+    "grant_type": "authorization_code",
+    "client_id": process.env.INT_CLIENT_ID,
+    "client_secret": process.env.INT_CLIENT_SECRET,
+    "code": req.query.code,
+    "redirect_uri": process.env.INT_REDIR_URL
+  })
+  .then(res => {
+    console.log(`statusCode: ${res.statusCode}`);
+    console.log(res);
+    console.log(res.data.access_token);
+    res.send(`You're all set!  You can close this window now.`);
+  })
+  .catch(error => {
+    console.error(error);
+    res.send(`Hmmm. Something didn't work out like I expected.`);
+  });
 });
 
 //Server config & housekeeping
