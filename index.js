@@ -8,6 +8,8 @@ var app = express();
 app.use(bodyParser.json());
 // app.use(express.static('images'));
 
+let access_token = "";
+
 const axios = require('axios')
 
 require('dotenv').config()
@@ -78,13 +80,16 @@ framework.hears(/help|what can i (do|say)|what (can|do) you do/i, function (bot,
     .catch((e) => console.error(`Problem in help handler: ${e.message}`));
 });
 
-/* On mention with command
-ex User enters @botname authorize, the bot will supply a link to start the oauth grant flow
-*/
 framework.hears('authorize', function (bot) {
   console.log("authorize command received");
   responded = true;
   bot.say("markdown", `[Authorize Me!](${process.env.INT_AUTH_URL}banana)`);
+});
+
+framework.hears('token', function (bot) {
+  console.log("token command received");
+  responded = true;
+  bot.say("markdown", "Access Token: `" + access_token + "`");
 });
 
 /* On mention with command
@@ -246,10 +251,10 @@ app.get('/authorize', function (req, res) {
     "code": req.query.code,
     "redirect_uri": process.env.INT_REDIR_URL
   })
-  .then(res => {
-    console.log(`statusCode: ${res.statusCode}`);
-    console.log(res);
-    console.log(res.data.access_token);
+  .then(res2 => {
+    console.log(res2);
+    console.log(res2.data.access_token);
+    access_token = res2.data.access_token;
     res.send(`You're all set!  You can close this window now.`);
   })
   .catch(error => {
