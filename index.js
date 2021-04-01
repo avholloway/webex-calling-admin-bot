@@ -86,6 +86,12 @@ framework.hears('authorize', function (bot) {
   bot.say("markdown", `[Authorize Me!](${process.env.INT_AUTH_URL}banana)`);
 });
 
+framework.hears('debug', function (bot) {
+  console.log("debug command received");
+  responded = true;
+  bot.say("text", `${bot}`);
+});
+
 framework.hears('token', function (bot) {
   console.log("token command received");
   responded = true;
@@ -230,19 +236,6 @@ function sendHelp(bot) {
 }
 
 app.get('/authorize', function (req, res) {
-  // From Python + Flask
-  // data = {
-  //   "grant_type": "authorization_code",
-  //   "client_id": "Cbd0696ec5be29c8bf30c854a0b986e524baa98a714a0cac96305b8e7b0cc5ede",
-  //   "client_secret": "0ae05e2a292d5ef3738f8c6a53ec4e57f37b258f4d2531ac98fcf7ba41879404",
-  //   "code": request.args.get("code"),
-  //   "redirect_uri": "http://127.0.0.1:5000/oauth"
-  // }
-  // resp = requests.post("https://webexapis.com/v1/access_token", data=data)
-  // resp.raise_for_status()
-  // access_token = resp.json()["access_token"]
-  // session['access_token'] = access_token
-  // return redirect(url_for("home"))
   axios
   .post('https://webexapis.com/v1/access_token', {
     "grant_type": "authorization_code",
