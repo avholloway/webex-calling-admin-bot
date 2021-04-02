@@ -92,7 +92,8 @@ framework.hears('word', function (bot, trigger) {
   console.log("word command received");
   responded = true;
   if (trigger.args.length === 1) {
-    bot.say("markdown", `The word is "${bot.recall("the_word")}"`);
+    bot.recall("the_word").then(word => {the_word = word});
+    bot.say("markdown", `The word is "${the_word}"`);
   } else {
     bot.say("markdown", `${trigger.args[1]}`);
     bot.store("the_word", trigger.args[1]);
