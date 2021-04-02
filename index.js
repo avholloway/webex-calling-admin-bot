@@ -93,7 +93,7 @@ framework.hears('word', function (bot, trigger) {
   responded = true;
   if (trigger.args.length === 1) {
     bot.say("markdown", `The word is "${the_word}"`);
-  } esle {
+  } else {
     bot.say("markdown", `${trigger.args[1]}`);
     the_word = trigger.args[1];
     console.log(trigger);
