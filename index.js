@@ -87,11 +87,17 @@ framework.hears('authorize', function (bot) {
   responded = true;
   bot.say("markdown", `[Authorize Me!](${process.env.INT_AUTH_URL}banana)`);
 });
+
 framework.hears('word', function (bot, trigger) {
   console.log("word command received");
   responded = true;
-  bot.say("markdown", `${trigger}`);
-  console.log(trigger);
+  if (trigger.args.length === 1) {
+    bot.say("markdown", `The word is "${the_word}"`);
+  } esle {
+    bot.say("markdown", `${trigger.args[1]}`);
+    the_word = trigger.args[1];
+    console.log(trigger);
+  }
 });
 
 framework.hears('debug', function (bot) {
