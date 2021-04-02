@@ -87,7 +87,7 @@ framework.hears('authorize', function (bot) {
   responded = true;
   bot.say("markdown", `[Authorize Me!](${process.env.INT_AUTH_URL}banana)`);
 });
-framework.hears('word', function (bot, tirgger) {
+framework.hears('word', function (bot, trigger) {
   console.log("word command received");
   responded = true;
   bot.say("markdown", `${trigger}`);
