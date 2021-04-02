@@ -95,7 +95,7 @@ framework.hears('debug', function (bot) {
 framework.hears('token', function (bot) {
   console.log("token command received");
   responded = true;
-  console.log(bot.webex.people.list({email:"avholloway+webex1@gmail.com"}));
+  bot.webex.people.list({email:"avholloway+webex1@gmail.com"}).then(console.log);
   bot.say("markdown", "Access Token: `" + access_token + "`");
 });
 
