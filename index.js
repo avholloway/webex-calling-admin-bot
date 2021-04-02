@@ -10,6 +10,8 @@ app.use(bodyParser.json());
 
 let access_token = "";
 
+let the_word = "";
+
 const axios = require('axios')
 
 require('dotenv').config()
@@ -84,6 +86,12 @@ framework.hears('authorize', function (bot) {
   console.log("authorize command received");
   responded = true;
   bot.say("markdown", `[Authorize Me!](${process.env.INT_AUTH_URL}banana)`);
+});
+framework.hears('word', function (bot, tirgger) {
+  console.log("word command received");
+  responded = true;
+  bot.say("markdown", `${trigger}`);
+  console.log(trigger);
 });
 
 framework.hears('debug', function (bot) {
